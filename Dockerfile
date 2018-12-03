@@ -1,4 +1,4 @@
-FROM elixir:1.6.6
+FROM elixir:1.7
 ARG NODEREPO="node_10.x"
 ARG DISTRO="stretch"
 ARG APP_NAME=accent
@@ -19,7 +19,14 @@ RUN git clone https://github.com/fire/accent.git && \
   mv accent/* ./ && \
   mv accent/.[!.]* ./
 RUN mix do deps.get, deps.compile, compile
+# AWFUL HACKS TODO REMOVE
+ENV API_HOST=https://accent.apps.chibifire.com
+ENV API_WS_HOST=wss://accent.apps.chibifire.com
+ENV CANONICAL_HOST=accent.apps.chibifire.com
+ENV GOOGLE_API_CLIENT_ID=764613624458-s9vju730d81rbkkuc3qghdot3dnlelgu.apps.googleusercontent.com
+# AWFUL HACKS TODO REMOVE END
 RUN npm --prefix webapp install
+RUN npm --prefix webapp run build
 RUN mix phx.digest
 RUN mix release --env=prod --verbose \
     && mv _build/prod/rel/${APP_NAME} /opt/release \
