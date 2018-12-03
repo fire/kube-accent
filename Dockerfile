@@ -35,4 +35,4 @@ WORKDIR /opt/app
 EXPOSE ${PORT}
 EXPOSE ${WEBAPP_PORT}
 COPY --from=0 /opt/release .
-CMD ["/opt/app/bin/start_server", "foreground"]
+CMD '/bin/sh -c "/opt/app/bin/start_server migrate && /opt/app/bin/start_server foreground"'
