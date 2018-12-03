@@ -20,6 +20,7 @@ RUN git clone https://github.com/fire/accent.git && \
   mv accent/.[!.]* ./
 RUN mix do deps.get, deps.compile, compile
 RUN npm --prefix webapp install
+RUN mix phx.digest
 RUN mix release --env=prod --verbose \
     && mv _build/prod/rel/${APP_NAME} /opt/release \
     && mv /opt/release/bin/${APP_NAME} /opt/release/bin/start_server
